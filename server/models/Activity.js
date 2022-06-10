@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
-const reactionSchema = require('./Reaction');
+const noteSchema = require('./Note');
 const dateFormat = require('../utils/dateFormat');
 
-const thoughtSchema = new Schema(
+const activitySchema = new Schema(
   {
-    thoughtText: {
+    activityText: {
       type: String,
-      required: 'You need to leave a thought!',
+      required: 'You need to leave an activity!',
       minlength: 1,
       maxlength: 280
     },
@@ -19,7 +19,7 @@ const thoughtSchema = new Schema(
       type: String,
       required: true
     },
-    reactions: [reactionSchema]
+    notes: [noteSchema]
   },
   {
     toJSON: {
@@ -28,10 +28,10 @@ const thoughtSchema = new Schema(
   }
 );
 
-thoughtSchema.virtual('reactionCount').get(function() {
-  return this.reactions.length;
+activitySchema.virtual('noteCount').get(function() {
+  return this.notes.length;
 });
 
-const Thought = model('Thought', thoughtSchema);
+const Activity = model('Activity', activitySchema);
 
-module.exports = Thought;
+module.exports = Activity;

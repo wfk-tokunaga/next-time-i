@@ -1,15 +1,14 @@
 const faker = require('faker');
 
 const db = require('../config/connection');
-const { Thought, User } = require('../models');
+const { Activity, User } = require('../models');
 
 db.once('open', async () => {
-  await Thought.deleteMany({});
+  await Activity.deleteMany({});
   await User.deleteMany({});
 
   // create user data
   const userData = [];
-
   for (let i = 0; i < 50; i += 1) {
     const username = faker.internet.userName();
     const email = faker.internet.email(username);
@@ -35,37 +34,37 @@ db.once('open', async () => {
     await User.updateOne({ _id: userId }, { $addToSet: { friends: friendId } });
   }
 
-  // create thoughts
-  let createdThoughts = [];
+  // create activities
+  let createdActivities = [];
   for (let i = 0; i < 100; i += 1) {
-    const thoughtText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
+    const activityText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
 
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { username, _id: userId } = createdUsers.ops[randomUserIndex];
 
-    const createdThought = await Thought.create({ thoughtText, username });
+    const createdActivity = await Activity.create({ activityText, username });
 
     const updatedUser = await User.updateOne(
       { _id: userId },
-      { $push: { thoughts: createdThought._id } }
+      { $push: { activities: createdActivity._id } }
     );
 
-    createdThoughts.push(createdThought);
+    createdActivities.push(createdActivity);
   }
 
-  // create reactions
+  // create notes
   for (let i = 0; i < 100; i += 1) {
-    const reactionBody = faker.lorem.words(Math.round(Math.random() * 20) + 1);
+    const noteBody = faker.lorem.words(Math.round(Math.random() * 20) + 1);
 
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { username } = createdUsers.ops[randomUserIndex];
 
-    const randomThoughtIndex = Math.floor(Math.random() * createdThoughts.length);
-    const { _id: thoughtId } = createdThoughts[randomThoughtIndex];
+    const randomActivityIndex = Math.floor(Math.random() * createdActivities.length);
+    const { _id: activityId } = createdActivities[randomActivityIndex];
 
-    await Thought.updateOne(
-      { _id: thoughtId },
-      { $push: { reactions: { reactionBody, username } } },
+    await Activity.updateOne(
+      { _id: activityId },
+      { $push: { notes: { noteBody, username } } },
       { runValidators: true }
     );
   }
