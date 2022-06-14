@@ -8,7 +8,7 @@ const ActivityList = ({ activities, title }) => {
 
   return (
     <div>
-      <h3>{title}</h3>
+      {/* <h3>{title}</h3> */}
       {activities &&
         activities.map(activity => (
           <div key={activity._id} className="card mb-3">
@@ -27,7 +27,7 @@ const ActivityList = ({ activities, title }) => {
                 <p>{activity.activityText}</p>
                 <p className="mb-0">
                   Notes: {activity.noteCount} || Click to{' '}
-                  {activity.noteCount ? 'see' : 'start'} the notes!
+                  {activity.noteCount ? 'see' : 'start'} or add notes!
                 </p>
               </Link>
             </div>

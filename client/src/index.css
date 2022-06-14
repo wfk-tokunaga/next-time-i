@@ -1248,3 +1248,8 @@ nav a:hover {
     align-items: center;
   }
 }
+
+.activityText {
+  font-size: larger;
+  font-weight: bolder;
+}
